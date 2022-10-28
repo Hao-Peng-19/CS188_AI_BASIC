@@ -119,7 +119,6 @@ def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
     start_state = problem.getStartState()
-    start_state = problem.getStartState()
     possible_nodes = util.Queue()
     possible_nodes.push(Node((start_state, [], 1)))
     visited_nodes = set()
@@ -141,6 +140,26 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
+    start_state = problem.getStartState()
+    possible_nodes = util.PriorityQueue()
+    start_node = Node((start_state, [], 0))
+    possible_nodes.update(start_node, start_node.ucs_heuristic)
+    visited_nodes = set()
+    while True:
+        if possible_nodes.isEmpty():
+            return []
+        current_state = possible_nodes.pop()
+        if problem.isGoalState(current_state.state):
+            return current_state.path
+        if current_state.state not in visited_nodes:
+            visited_nodes.add(current_state.state)
+            for child in problem.getSuccessors(current_state.state):
+                child_node = Node(child)
+                if child_node.state not in visited_nodes:
+                    child_node.path = current_state.path + [child_node.action]
+                    child_node.ucs_heuristic += current_state.ucs_heuristic
+                    possible_nodes.update(child_node, child_node.ucs_heuristic)
+
     util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
