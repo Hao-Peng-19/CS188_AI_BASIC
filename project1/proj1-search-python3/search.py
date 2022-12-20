@@ -27,6 +27,7 @@ class Node:
         self.path = []
         self.ucs_heuristic = self.cost
         self.astar_heuristic = 0
+
 class SearchProblem:
     """
     This class outlines the structure of a search problem, but doesn't implement
@@ -90,10 +91,11 @@ def depthFirstSearch(problem):
     To get started, you might want to try some of these simple commands to
     understand the search problem that is being passed in:
 
-    print("Start:", problem.getStartState())
+    print("Start:", problem.getStartS )
     print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
+
     "*** YOUR CODE HERE ***"
     start_state = problem.getStartState()
     possible_nodes = util.Stack()
