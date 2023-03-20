@@ -33,6 +33,7 @@ description for details.
 
 Good luck and happy searching!
 """
+
 import itertools
 
 from game import Directions
@@ -73,6 +74,7 @@ class SearchAgent(Agent):
 
     Note: You should NOT change any code in SearchAgent
     """
+
 
     def __init__(self, fn='depthFirstSearch', prob='PositionSearchProblem', heuristic='nullHeuristic'):
         # Warning: some advanced Python magic is employed below to find the right functions and problems
