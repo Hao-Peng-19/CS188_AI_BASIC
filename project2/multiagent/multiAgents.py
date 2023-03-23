@@ -174,7 +174,51 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
         legal moves.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        # 将最大值初始定义为负无穷大
+        maxVal = -float('inf')
+        bestAction = None
+        for action in gameState.getLegalActions(0):
+            # 求出接下来的所有MIN值，并和maxVal比较，求出MAX值
+            value = self._getMin(gameState.generateSuccessor(0, action))
+            # 满足条件则更新maxVal值，并记下bestAction
+            if value is not None and value > maxVal:
+                maxVal = value
+                bestAction = action
+        return bestAction
+
+    def _getMax(self, gameState, depth=0, agentIndex=0):
+        # 获得下一步
+        legalActions = gameState.getLegalActions(agentIndex)
+        # 如果遍历到根节点或无可继续节点，则返回评价值
+        if depth == self.depth or len(legalActions) == 0:
+            return self.evaluationFunction(gameState)
+        maxVal = -float('inf')
+        # 对吃豆人下一步可行的操作进行遍历
+        for action in legalActions:
+            # 从第一个鬼怪开始MIN遍历
+            value = self._getMin(gameState.generateSuccessor(agentIndex, action), depth, 1)
+            if value is not None and value > maxVal:
+                maxVal = value
+        return maxVal
+
+    def _getMin(self, gameState, depth=0, agentIndex=1):
+        # 获得鬼怪的下一步操作
+        legalActions = gameState.getLegalActions(agentIndex)
+        # 同样，如果遍历到根节点或无可继续节点，则返回评价值
+        if depth == self.depth or len(legalActions) == 0:
+            return self.evaluationFunction(gameState)
+        minVal = float('inf')
+        # 对当前鬼怪的可行下一步进行遍历，其中要递归调用以计算其他鬼怪的行动
+        for action in legalActions:
+            # 如果当前已经是最后一只鬼怪，那么下一轮就该是计算吃豆人的行为了，即调用MAX函数
+            if agentIndex == gameState.getNumAgents() - 1:
+
+                value = self._getMax(gameState.generateSuccessor(agentIndex, action), depth + 1, 0)
+            else:
+                value = self._getMin(gameState.generateSuccessor(agentIndex, action), depth, agentIndex + 1)
+            if value is not None and value < minVal:
+                minVal = value
+        return minVal
 
 def betterEvaluationFunction(currentGameState):
     """
